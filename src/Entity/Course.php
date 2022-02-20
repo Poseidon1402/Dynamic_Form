@@ -17,6 +17,10 @@ class Course
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
+    #[ORM\ManyToOne(targetEntity: Sector::class, inversedBy: 'course')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $sector;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -30,6 +34,18 @@ class Course
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSector(): ?Sector
+    {
+        return $this->sector;
+    }
+
+    public function setSector(?Sector $sector): self
+    {
+        $this->sector = $sector;
 
         return $this;
     }
