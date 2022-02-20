@@ -6,6 +6,7 @@ use App\Repository\SectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SectorRepository::class)]
+#[ORM\Table(name: 'Sectors')]
 class Sector
 {
     #[ORM\Id]
