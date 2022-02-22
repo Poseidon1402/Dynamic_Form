@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CourseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
@@ -20,6 +22,14 @@ class Course
     #[ORM\ManyToOne(targetEntity: Sector::class, inversedBy: 'course')]
     #[ORM\JoinColumn(nullable: false)]
     private $sector;
+
+    #[ORM\OneToMany(mappedBy: 'course', targetEntity: Students::class, orphanRemoval: true)]
+    private $students;
+
+    public function __construct()
+    {
+        $this->students = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,6 +56,36 @@ class Course
     public function setSector(?Sector $sector): self
     {
         $this->sector = $sector;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Students>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Students $student): self
+    {
+        if (!$this->students->contains($student)) {
+            $this->students[] = $student;
+            $student->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Students $student): self
+    {
+        if ($this->students->removeElement($student)) {
+            // set the owning side to null (unless already changed)
+            if ($student->getCourse() === $this) {
+                $student->setCourse(null);
+            }
+        }
 
         return $this;
     }

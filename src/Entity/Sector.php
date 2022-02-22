@@ -22,9 +22,13 @@ class Sector
     #[ORM\OneToMany(mappedBy: 'sector', targetEntity: Course::class, orphanRemoval: true)]
     private $course;
 
+    #[ORM\OneToMany(mappedBy: 'sector', targetEntity: Students::class, orphanRemoval: true)]
+    private $students;
+
     public function __construct()
     {
         $this->course = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,6 +72,36 @@ class Sector
             // set the owning side to null (unless already changed)
             if ($course->getSector() === $this) {
                 $course->setSector(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Students>
+     */
+    public function getMention(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addMention(Students $students): self
+    {
+        if (!$this->students->contains($students)) {
+            $this->students[] = $students;
+            $students->setSector($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMention(Students $students): self
+    {
+        if ($this->students->removeElement($students)) {
+            // set the owning side to null (unless already changed)
+            if ($students->getSector() === $this) {
+                $students->setSector(null);
             }
         }
 

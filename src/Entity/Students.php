@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\StudentRepository;
+use App\Repository\StudentsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: StudentRepository::class)]
-#[ORM\Table(name: 'Students')]
-class Student
+#[ORM\Entity(repositoryClass: StudentsRepository::class)]
+class Students
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,10 +16,12 @@ class Student
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\ManyToOne(targetEntity: Sector::class, inversedBy: 'students')]
+    #[ORM\JoinColumn(nullable: false)]
     private $sector;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'students')]
+    #[ORM\JoinColumn(nullable: false)]
     private $course;
 
     #[ORM\Column(type: 'date')]
@@ -43,24 +44,24 @@ class Student
         return $this;
     }
 
-    public function getSector(): ?string
+    public function getSector(): ?Sector
     {
         return $this->sector;
     }
 
-    public function setSector(string $sector): self
+    public function setSector(?Sector $sector): self
     {
         $this->sector = $sector;
 
         return $this;
     }
 
-    public function getCourse(): ?string
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    public function setCourse(string $course): self
+    public function setCourse(?Course $course): self
     {
         $this->course = $course;
 
