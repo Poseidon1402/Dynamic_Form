@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Course;
 use App\Entity\Sector;
 use App\Entity\Student;
-use App\Repository\SectorRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -33,7 +32,9 @@ class StudentType extends AbstractType
                 'query_builder' => fn(ServiceEntityRepository $service) =>
                 $service->createQueryBuilder('c')->orderBy('c.name', 'ASC')
             ])
-            ->add('birthDate', DateType::class)
+            ->add('birthDate', DateType::class, [
+                'widget' => 'single_text'
+            ])
         ;
     }
 
