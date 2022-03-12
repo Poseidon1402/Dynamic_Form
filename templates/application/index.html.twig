@@ -7,7 +7,10 @@
     <div class="container w-50">
         <p class="h1 text-secondary text-center mt-5 mb-3">Welcome</p>
             {{ form_start(form) }}
-                {{ form_widget(form)}}    
+                {{ form_row(form.name) }}
+                {{ form_row(form.sector) }}
+                {{ form_row(form.course) }}
+                {{ form_row(form.birthDate) }}   
 
                 <div class="mt-3 d-grid">
                     <input type="submit" class="btn btn-primary btn-block" value="Submit">

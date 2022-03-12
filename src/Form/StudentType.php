@@ -44,19 +44,6 @@ class StudentType extends AbstractType
                     ])
                 ]
             ])
-            /*
-            ->add('course', EntityType::class, [
-                'class' => Course::class,
-                'choice_label' => 'name',
-                'query_builder' => fn(ServiceEntityRepository $service) =>
-                $service->createQueryBuilder('c')->orderBy('c.name', 'ASC'),
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'This field cannot be blank'
-                    ])
-                ]
-            ])
-            */
             ->add('birthDate', DateType::class, [
                 'widget' => 'single_text'
             ])
@@ -67,18 +54,17 @@ class StudentType extends AbstractType
             $sector = $event->getData()->getSector() ?? null;
             
             //retrieve all course which is wrapped with a sector
-            $course = $this->courseRepository->createQueryBuilder('c')
-                ->andWhere('c.sector = :val')
-                ->setParameter('val', $sector)
-                ->orderBy('c.name', 'ASC')
-                ->getQuery()
-                ->getResult()
-            ;
+            $course = $this->courseRepository->findBySector($sector, ['name' => 'ASC']);
             
             $event->getForm()->add('course', EntityType::class, [
                 'class' => Course::class,
                 'choice_label' => 'name',
-                'choices' => $course
+                'choices' => $course,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'This field cannot be null.'
+                    ])
+                ]
             ]);
         });
     }

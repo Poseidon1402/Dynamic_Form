@@ -19,7 +19,7 @@ class ApplicationController extends AbstractController
     public function index(Request $request, EntityManagerInterface $em, SectorRepository $rep): Response
     {
         $student = new Students;
-        $sector = $rep->findBy(['name' => 'sciences'])[0];
+        $sector = $rep->findByName('informatic')[0];
 
         $student->setSector($sector);
         
